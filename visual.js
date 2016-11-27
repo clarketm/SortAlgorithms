@@ -96,7 +96,7 @@ function mergeSort(array) {
         let p1 = 0;
         let p2 = 0;
 
-        let result = []; // new int[a.length + b.length];
+        let result = [];
         let i = 0;
 
         while (p1 < a.length && p2 < b.length) {
@@ -152,7 +152,6 @@ function mergeSort(array) {
     }
 }
 
-// TODO DOES NOT WORK
 function quickSort(array) {
     array = array.slice();
     if (array.length <= 1) {
