@@ -1,5 +1,7 @@
 'use strict';
 
+const utils = require('./utils');
+
 const sortingAlgorithms = {
     insertion: insertionSort,
     selection: selectionSort,
@@ -7,16 +9,6 @@ const sortingAlgorithms = {
     merge: mergeSort,
     quick: quickSort
 };
-
-function assertString(string) {
-    const isString = typeof string === 'string';
-    if (!isString) throw new Error(`Parameter needs to be a type of string: ${string}`);
-}
-
-function assertArray(array) {
-    const notArray = !(array instanceof Array);
-    if (notArray) throw new Error(`Parameter needs to be an instance of Array: ${array}`);
-}
 
 function insertionSort(array) {
     array = array.slice();
@@ -203,10 +195,10 @@ function quickSort(array) {
 }
 
 function use(algorithm) {
-    assertString(algorithm);
+    utils.assertString(algorithm);
     return {
         sort: function(array) {
-            assertArray(array);
+            utils.assertArray(array);
             return sortingAlgorithms[algorithm.toLowerCase()](array)
         }
     };
