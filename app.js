@@ -129,26 +129,7 @@ function bubbleSort(array) {
         let tmp = array[current];
         array[current] = array[next];
         array[next] = tmp;
-        (function(arr, _counter) {
-          setTimeout(function() {
-            let dataUpdate = d3
-              .select('.visual')
-              .selectAll('div')
-              .data(arr);
-
-            let dataEnter = dataUpdate
-              .enter()
-              .append('div')
-              .style('color', 'green');
-
-            dataUpdate
-              .merge(dataEnter)
-              .style('height', '10px')
-              .style('width', d => (d + 1) * 5 + 'px')
-              .style('background', 'lightgreen')
-              .style('border', '1px solid black');
-          }, 80 * _counter);
-        })(array.slice(), ++counter);
+        draw(array);
       }
       current++;
       next++;
@@ -156,4 +137,27 @@ function bubbleSort(array) {
     stoppingPoint--;
   }
   return array;
+}
+
+function draw(array) {
+  (function(arr, _counter) {
+    setTimeout(function() {
+      let dataUpdate = d3
+        .select('.visual')
+        .selectAll('div')
+        .data(arr);
+
+      let dataEnter = dataUpdate
+        .enter()
+        .append('div')
+        .style('color', 'green');
+
+      dataUpdate
+        .merge(dataEnter)
+        .style('height', '10px')
+        .style('width', d => (d + 1) * 5 + 'px')
+        .style('background', 'lightgreen')
+        .style('border', '1px solid black');
+    }, 80 * _counter);
+  })(array.slice(), ++counter);
 }
