@@ -34,7 +34,14 @@
     </style>
 </head>
 
-<body class="container-fluid">
+<body class="container">
+    <div class="row">
+        <ul class="list-unstyled">
+            <li><p class="lead">Inno Irving V. Estrera</p></li>
+            <li><p class="lead">November 30, 2016</p></li>
+            <li><p class="lead">Visualization of sorting algorithms</p></li>
+        </ul>
+    </div>
     <div class="row">
         <div class="col-md-4">
             <div class="insertion bg-primary"></div><p class="lead">Insertion Sort</p>
@@ -55,7 +62,13 @@
         </div>
     </div>
     <div class="row">
-        <button class="btn btn-success col-md-12" id="startButton"><strong class="lead">START</strong></button>
+        <button class="btn-lg btn-success col-md-12" id="startButton"><strong class="lead">START</strong></button>
+    </div>
+
+    <div class="row" style="padding-top: 40px">
+        <div class="col-md-6">
+            <p class="lead">Enter your own data: </p><input class="form-control" placeholder="1, 4, 2, 5, 4, 0" id="inputTextData">
+        </div>
     </div>
 
     <script src="sort.js"></script>

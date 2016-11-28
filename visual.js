@@ -7,6 +7,25 @@
     document
         .getElementById('startButton')
         .addEventListener('click', function(event) {
+            let inputText = document.getElementById('inputTextData');
+
+            let arrayInput = inputText.value.trim().split(',').reduce(function(previous, curr) {
+                if (curr.length <= 0) {
+                    return previous;
+                }
+                if (typeof curr === 'string' && !isNaN(curr)) {
+                    previous.push(Number(curr));
+                } else {
+                    console.log('curr', curr);
+                    alert('please enter a valid comma separated numbers as input');
+                }
+                return previous;
+            }, []);
+
+            if (arrayInput.length > 0) testArray = arrayInput.slice();
+
+            inputText.placeholder = testArray.toString();
+
             sortAlgorithms
                 .use('insertion')
                 .sort(testArray);
