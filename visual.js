@@ -4,25 +4,29 @@
     let sortAlgorithms = new SortAlgorithms(visualizer);
     let testArray = [0, 1, 4, 3, 9, 6, 7, 3, 0];
 
-    sortAlgorithms
-        .use('insertion')
-        .sort(testArray);
+    document
+        .getElementById('startButton')
+        .addEventListener('click', function(event) {
+            sortAlgorithms
+                .use('insertion')
+                .sort(testArray);
 
-    sortAlgorithms
-        .use('selection')
-        .sort(testArray);
+            sortAlgorithms
+                .use('selection')
+                .sort(testArray);
 
-    sortAlgorithms
-        .use('bubble')
-        .sort(testArray);
+            sortAlgorithms
+                .use('bubble')
+                .sort(testArray);
 
-    sortAlgorithms
-        .use('merge')
-        .sort(testArray);
+            sortAlgorithms
+                .use('merge')
+                .sort(testArray);
 
-    sortAlgorithms
-        .use('quick')
-        .sort(testArray);
+            sortAlgorithms
+                .use('quick')
+                .sort(testArray);
+        });
 
     function visualizer(array, counter, algorithm) {
         (function(arr, _counter, _algorithm) {
