@@ -2,7 +2,7 @@
     'use strict';
 
     let sortAlgorithms = new SortAlgorithms(visualizer);
-    let testArray = [0, 1, 4, 3, 9, 6, 7, 3, 0];
+    let testArray = [0, 3, 13, 6, 33, 3, 12, 1, 4, 6, 9, 22, 19, 14, 31, 7, 3, 0, 15, 10, 3, 12, 1, 4, 6, 9, 22, 19];
 
     document
         .getElementById('startButton')
@@ -40,6 +40,10 @@
                     .enter()
                     .append('div')
                     .style('color', 'green');
+
+                dataUpdate
+                    .exit()
+                    .remove();
 
                 dataUpdate
                     .merge(dataEnter)
