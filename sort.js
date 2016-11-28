@@ -87,7 +87,6 @@
             return array;
         }
 
-        // TODO Add visualizer
         function mergeSort(array) {
             return divide(leftHalf(array), rightHalf(array));
 
@@ -132,6 +131,7 @@
                     p2++;
                 }
 
+                visualizer(result.slice(), ++counter, 'merge');
                 return result;
             }
 
@@ -162,7 +162,6 @@
             }
         }
 
-        // TODO Add visualizer
         function quickSort(array) {
             array = array.slice();
             if (array.length <= 1) {
@@ -210,6 +209,8 @@
                 let temp = arr[left];
                 arr[left] = arr[right];
                 arr[right] = temp;
+
+                visualizer(arr.slice(), ++counter, 'quick');
             }
         }
 

@@ -16,6 +16,14 @@
         .use('bubble')
         .sort(testArray);
 
+    sortAlgorithms
+        .use('merge')
+        .sort(testArray);
+
+    sortAlgorithms
+        .use('quick')
+        .sort(testArray);
+
     function visualizer(array, counter, algorithm) {
         (function(arr, _counter, _algorithm) {
             setTimeout(function() {
