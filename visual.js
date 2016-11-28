@@ -2,29 +2,25 @@
     'use strict';
 
     let sortAlgorithms = new SortAlgorithms(visualizer);
-    let testArray = [0, 3, 13, 6, 33, 3, 12, 1, 4, 6, 9, 22, 19, 14, 31, 7, 3, 0, 15, 10, 3, 12, 1, 4, 6, 9, 22, 19];
+    let testArray = [];
+    initializeGraphs();
+
+    let inputText = document.getElementById('inputTextData');
+
+    inputText.addEventListener('focusout', function(event) {
+        testArray = getArrayFromInput();
+        initializeGraphs();
+    });
 
     document
         .getElementById('startButton')
         .addEventListener('click', function(event) {
-            let inputText = document.getElementById('inputTextData');
 
-            let arrayInput = inputText.value.trim().split(',').reduce(function(previous, curr) {
-                if (curr.length <= 0) {
-                    return previous;
-                }
-                if (typeof curr === 'string' && !isNaN(curr)) {
-                    previous.push(Number(curr));
-                } else {
-                    console.log('curr', curr);
-                    alert('please enter a valid comma separated numbers as input');
-                }
-                return previous;
-            }, []);
+            let arrayInput = getArrayFromInput();
 
             if (arrayInput.length > 0) testArray = arrayInput.slice();
 
-            inputText.placeholder = testArray.toString();
+            initializeGraphs();
 
             sortAlgorithms
                 .use('insertion')
@@ -72,5 +68,29 @@
                     .style('border', '1px solid black');
             }, 80 * _counter);
         })(array.slice(), ++counter, algorithm);
+    }
+
+    function getArrayFromInput() {
+        console.log(inputText);
+        return inputText.value.trim().split(',').reduce(function(previous, curr) {
+            if (curr.length <= 0) {
+                return previous;
+            }
+            if (typeof curr === 'string' && !isNaN(curr)) {
+                previous.push(Number(curr));
+            } else {
+                console.log('curr', curr);
+                alert('please enter a valid comma separated numbers as input');
+            }
+            return previous;
+        }, []);
+    }
+
+    function initializeGraphs() {
+        visualizer(testArray.slice(), 0, 'insertion');
+        visualizer(testArray.slice(), 0, 'selection');
+        visualizer(testArray.slice(), 0, 'bubble');
+        visualizer(testArray.slice(), 0, 'merge');
+        visualizer(testArray.slice(), 0, 'quick');
     }
 })();
