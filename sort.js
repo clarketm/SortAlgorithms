@@ -163,55 +163,47 @@
         }
 
         function quickSort(array) {
-            array = array.slice();
-            if (array.length <= 1) {
-                return array;
+
+            if (array.length <= 1) return array;
+
+            return _quickSort(array.slice(), 0, array.length - 1);
+
+            function _quickSort(array, low, high) {
+                let pivot;
+
+                if (high > low) {
+                    pivot = partition(array, low, high);
+                    _quickSort(array, low, pivot - 1);
+                    _quickSort(array, pivot + 1, high);
+                    visualizer(array.slice(), ++counter, 'quick');
+                }
+                return array.slice();
             }
 
-            sort(array, 0, array.length - 1);
-            return array;
+            function partition(array, low, high) {
+                let left, right, target = array[low];
 
-            function sort(arr, left, right) {
-                if (right - left < 1) return;
-                let partitionIndex = partition(arr, left, right);
-
-                sort(arr, left, partitionIndex - 1);
-                sort(arr, partitionIndex + 1, right);
-            }
-
-            function partition(arr, left, right) {
-                let ptr = 'RIGHT';
-                let pivot = arr[left];
+                left = low;
+                right = high;
 
                 while (left < right) {
-                    switch (ptr) {
-                        case 'RIGHT':
-                            while (arr[right] > pivot) right--;
-                            swap(arr, left, right);
-                            left++;
-                            ptr = 'LEFT';
-                            break;
-                        case 'LEFT':
-                            while (arr[left] < pivot) left++;
-                            swap(arr, left, right);
-                            right--;
-                            ptr = 'RIGHT';
-                            break;
-                        default:
-                            throw new Error("pointer not specified");
-                    }
+                    while (array[left] <= target) left++;
+                    while (array[right] > target) right--;
+                    if (left < right)
+                        swap(array, left, right);
                 }
 
+                array[low] = array[right];
+                array[right] = target;
                 return right;
             }
 
-            function swap(arr, left, right) {
-                let temp = arr[left];
-                arr[left] = arr[right];
-                arr[right] = temp;
-
-                visualizer(arr.slice(), ++counter, 'quick');
+            function swap(array, indexA, indexB) {
+                let tmp = array[indexA];
+                array[indexA] = array[indexB];
+                array[indexB] = tmp;
             }
+
         }
 
         function use(algorithm) {
