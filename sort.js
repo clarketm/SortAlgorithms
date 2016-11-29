@@ -175,7 +175,6 @@
                     pivot = partition(array, low, high);
                     _quickSort(array, low, pivot - 1);
                     _quickSort(array, pivot + 1, high);
-                    visualizer(array.slice(), ++counter, 'quick');
                 }
                 return array.slice();
             }
@@ -191,6 +190,7 @@
                     while (array[right] > target) right--;
                     if (left < right)
                         swap(array, left, right);
+                    visualizer(array.slice(), ++counter, 'quick');
                 }
 
                 array[low] = array[right];
