@@ -1,5 +1,5 @@
-# SortAlgorithms
-Sorting algorithm visualization using D3.
+# [SortAlgorithms](https://www.travismclarke.com/sort-algorithms/)
+Sorting algorithm visualization using D3. **=> [Demo](https://www.travismclarke.com/sort-algorithms/)**
 
 ## Getting Started
 
