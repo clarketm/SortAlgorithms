@@ -16,15 +16,15 @@
 
         const document = window.document;
         let timeouts = [],
+            queue = [],
             duration = 2000;
 
         function clearTimeouts() {
             return new Promise((resolve, reject) => {
-                for (let timeout of timeouts) {
+                for (let timeout of timeouts.concat(queue)) {
                     window.clearTimeout(timeout);
                 }
-                timeouts = [];
-                resolve("complete")
+                (timeouts = []) && (queue = []) && resolve("complete")
             });
         }
 
@@ -51,7 +51,7 @@
             return document.getElementById('inputTextData').value.trim().split(',').reduce(
                 function (previous, current) {
                     if (!current || isNaN(current)) {
-                        return alert('Please enter a comma separated list of numbers.');
+                        return;
                     }
                     previous.push(Number(current));
                     return previous;
@@ -71,14 +71,16 @@
         }
 
         function visualizer(array, counter, algorithm) {
-            let timeout;
+            let timeout,
+                start;
 
             // TODO: implement Promise height transition.
             (function (array, counter, algorithm) {
-                setTimeout(() => {
+                start = setTimeout(() => {
                     timeout = startAlgorithms(array, counter, algorithm);
                     timeouts.push(timeout);
                 }, timeouts.length ? 100 : 100 + duration);
+                queue.push(start);
             })(array, counter, algorithm);
 
             function startAlgorithms(array, counter, algorithm) {
@@ -115,7 +117,7 @@
 
             startEl.addEventListener('click', function (e) {
                 let sortAlgorithms = getSortingAlgorithms(),
-                    inputArray = getArrayFromInput() || [];
+                    inputArray = e.detail.reset || getArrayFromInput() || [];
 
                 if (!inputArray.length || e.detail.reset) {
                     return Promise.all(reset(sortAlgorithms.algorithmMap, e.detail.reset)).then((result) => {

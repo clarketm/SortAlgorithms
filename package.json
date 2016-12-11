@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/lite-server/bin/lite-server",
-    "css": "./node_modules/less/bin/lessc style.less style.css"
+    "css": "./node_modules/less/bin/lessc style.less style.css",
+    "js": "./node_modules/.bin/babel sort.js visual.js -o script.js"
   },
   "keywords": [
     "sort",
@@ -31,8 +32,12 @@
     "d3": "^4.4.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babili": "0.0.9",
     "bootstrap": "^3.3.7",
     "less": "^2.7.1",
-    "lite-server": "^2.2.2"
+    "lite-server": "^2.2.2",
+    "uglify-js": "^2.7.5"
   }
 }

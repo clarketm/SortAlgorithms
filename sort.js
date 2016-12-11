@@ -6,7 +6,7 @@
     } else {
         factory(root);
     }
-}(this, function (exports) {
+}(this || window, function (exports) {
     'use strict';
 
     let SortAlgorithms = function (visualizer) {
