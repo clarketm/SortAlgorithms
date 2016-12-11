@@ -2,76 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous">
-    <style>
-        .insertion {
-            min-height: 300px;
-        }
 
-        .selection {
-            min-height: 300px;
-        }
+    <title>Sort Algorithms</title>
 
-        .bubble {
-            min-height: 300px;
-        }
-
-        .merge {
-            min-height: 300px;
-        }
-
-        .quick {
-            min-height: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="container">
-    <div class="row">
-        <ul class="list-unstyled">
-            <li><p class="lead">Inno Irving V. Estrera</p></li>
-            <li><p class="lead">November 30, 2016</p></li>
-            <li><p class="lead">Visualization of sorting algorithms</p></li>
-        </ul>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="insertion bg-primary"></div><p class="lead">Insertion Sort</p>
-        </div>
-        <div class="col-md-4">
-            <div class="selection bg-success"></div><p class="lead">Selection Sort</p>
-        </div>
-        <div class="col-md-4">
-            <div class="bubble bg-info"></div><p class="lead">Bubble Sort</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="merge bg-warning"></div><p class="lead">Merge Sort</p>
-        </div>
-        <div class="col-md-6">
-            <div class="quick bg-danger"></div><p class="lead">Quick Sort</p>
-        </div>
-    </div>
-    <div class="row">
-        <button class="btn-lg btn-success col-md-12" id="startButton"><strong class="lead">START</strong></button>
-    </div>
 
-    <div class="row" style="padding-top: 40px">
-        <div class="col-md-6">
-            <p class="lead">Enter your own data: </p><input class="form-control" placeholder="Enter comma separated numbers here (i.e. 1, 5, 3, 4, 0)" id="inputTextData">
-        </div>
-    </div>
+<h1>Visualization of sorting algorithms</h1>
 
-    <script src="sort.js"></script>
-    <script src="visual.js"></script>
+<p><small class="text-muted">Travis M. Clarke</small></p>
+
+<hr>
+
+<div class="row form-group">
+    <div class="col-md-6">
+        <input id="inputTextData"
+               class="form-control"
+               placeholder="Enter comma separated numbers here (i.e. 1, 5, 3, 4, 0)"
+               value="3,7,3,2,8,6,9,3,7,3,7,3,2,8,6,9,3,7,3,7,3,2,8,6,9,3,7">
+    </div>
+    <div class="col-md-6">
+        <button id="startButton" class="btn btn-success" type="button">START</button>
+        <button id="clearButton" class="btn btn-default" type="button">CLEAR</button>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="insertion"></div>
+        <p class="lead">Insertion Sort</p>
+    </div>
+    <div class="col-md-4">
+        <div class="selection"></div>
+        <p class="lead">Selection Sort</p>
+    </div>
+    <div class="col-md-4">
+        <div class="bubble"></div>
+        <p class="lead">Bubble Sort</p>
+    </div>
+    <div class="col-md-4">
+        <div class="merge"></div>
+        <p class="lead">Merge Sort</p>
+    </div>
+    <div class="col-md-4">
+        <div class="quick"></div>
+        <p class="lead">Quick Sort</p>
+    </div>
+</div>
+
+<script src="node_modules/d3/build/d3.js"></script>
+<script src="sort.js"></script>
+<script src="visual.js"></script>
 </body>
 </html>

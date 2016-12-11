@@ -2,11 +2,11 @@
     "use strict";
 
     if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
-        root.document ? factory(root, require('sortalgorithms'), true) : function (w) {
+        root.document ? factory(root, require('sort-algorithms'), true) : function (w) {
             if (!w.document) {
                 throw new Error("Visualizer requires a window with a document");
             }
-            return factory(w, require('sortalgorithms'));
+            return factory(w, require('sort-algorithms'));
         };
     } else {
         factory(root, root.SortAlgorithms);
@@ -15,6 +15,33 @@
         'use strict';
 
         const document = window.document;
+        let timeouts = [],
+            duration = 2000;
+
+        function clearTimeouts() {
+            return new Promise((resolve, reject) => {
+                for (let timeout of timeouts) {
+                    window.clearTimeout(timeout);
+                }
+                timeouts = [];
+                resolve("complete")
+            });
+        }
+
+        function clearGraphs(algorithmMap, resize) {
+            return new Promise((resolve, reject) => {
+                for (let [algorithm] of algorithmMap) {
+                    let el = document.getElementsByClassName(algorithm)[0];
+                    el.innerHTML = '';
+                    resize && (el.style.height = '5px');
+                }
+                resize && resolve("resize") || resolve("complete");
+            });
+        }
+
+        function reset(algorithmMap, reset) {
+            return [clearTimeouts(), clearGraphs(algorithmMap, reset)];
+        }
 
         function getSortingAlgorithms() {
             return new SortAlgorithms(visualizer);
@@ -22,85 +49,118 @@
 
         function getArrayFromInput() {
             return document.getElementById('inputTextData').value.trim().split(',').reduce(
-                function (previous, curr) {
-                    if (curr.length <= 0) {
-                        return previous;
+                function (previous, current) {
+                    if (!current || isNaN(current)) {
+                        return alert('Please enter a comma separated list of numbers.');
                     }
-                    if (typeof curr === 'string' && !isNaN(+curr)) {
-                        previous.push(Number(curr));
-                    } else {
-                        alert('please enter a valid comma separated numbers as input');
-                    }
+                    previous.push(Number(current));
                     return previous;
                 }, []);
         }
 
-        function initializeGraphs(inputArray) {
-            visualizer(inputArray.slice(), 0, 'insertion');
-            visualizer(inputArray.slice(), 0, 'selection');
-            visualizer(inputArray.slice(), 0, 'bubble');
-            visualizer(inputArray.slice(), 0, 'merge');
-            visualizer(inputArray.slice(), 0, 'quick');
+        function clearInput() {
+            return document.getElementById('inputTextData').value = '';
+        }
+
+        function initializeGraphs(inputArray, algorithmMap) {
+            for (let [algorithm] of algorithmMap) {
+                let el = document.getElementsByClassName(algorithm)[0];
+                visualizer(inputArray.slice(), 0, algorithm);
+                el.style.height = `${Math.max(inputArray.length * 5 + 3, 100)}px`;
+            }
         }
 
         function visualizer(array, counter, algorithm) {
-            (function (arr, _counter, _algorithm) {
-                setTimeout(function () {
-                    let dataUpdate = d3
-                        .select(`.${_algorithm}`)
-                        .selectAll('div')
-                        .data(arr);
+            let timeout;
 
-                    let dataEnter = dataUpdate
-                        .enter()
-                        .append('div')
-                        .style('color', 'green');
+            // TODO: implement Promise height transition.
+            (function (array, counter, algorithm) {
+                setTimeout(() => {
+                    timeout = startAlgorithms(array, counter, algorithm);
+                    timeouts.push(timeout);
+                }, timeouts.length ? 100 : 100 + duration);
+            })(array, counter, algorithm);
 
-                    dataUpdate
-                        .exit()
-                        .remove();
+            function startAlgorithms(array, counter, algorithm) {
+                return (function (array, counter, algorithm) {
+                    return setTimeout(function () {
+                        let dataUpdate = d3
+                            .select(`.${algorithm}`)
+                            .selectAll('div')
+                            .data(array);
 
-                    dataUpdate
-                        .merge(dataEnter)
-                        .style('height', '10px')
-                        .style('width', d => (d + 1) * 5 + 'px')
-                        .style('background', 'lightgreen')
-                        .style('border', '1px solid black');
-                }, 100 * _counter);
-            })(array.slice(), ++counter, algorithm);
+                        let dataEnter = dataUpdate
+                            .enter()
+                            .append('div');
+
+                        dataUpdate
+                            .exit()
+                            .remove();
+
+                        dataUpdate
+                            .merge(dataEnter)
+                            .style('height', '4px')
+                            .style('width', d => (d + 1) * 2 + '%')
+                            .style('border', '1px solid black')
+                            .style('background', '#999')
+                            .style('margin', '1px');
+                    }, 100 * counter)
+                })(array, counter, algorithm);
+            }
         }
 
         (function initializeButtonListener() {
-            document
-                .getElementById('startButton')
-                .addEventListener('click', function (event) {
+            let startEl = document.getElementById('startButton'),
+                clearEl = document.getElementById('clearButton');
 
-                    let sortAlgorithms = getSortingAlgorithms(),
-                        inputArray = getArrayFromInput() || [];
+            startEl.addEventListener('click', function (e) {
+                let sortAlgorithms = getSortingAlgorithms(),
+                    inputArray = getArrayFromInput() || [];
 
-                    initializeGraphs(inputArray);
+                if (!inputArray.length || e.detail.reset) {
+                    return Promise.all(reset(sortAlgorithms.algorithmMap, e.detail.reset)).then((result) => {
+                        return result[1] === 'resize' ? true : alert('Please enter a comma separated list of numbers.');
+                    });
+                }
 
-                    sortAlgorithms
-                        .use('insertion')
-                        .sort(inputArray);
+                startEl.textContent = 'RESTART';
 
-                    sortAlgorithms
-                        .use('selection')
-                        .sort(inputArray);
+                return Promise.all(reset(sortAlgorithms.algorithmMap))
+                    .then((result) => {
+                        initializeGraphs(inputArray, sortAlgorithms.algorithmMap);
 
-                    sortAlgorithms
-                        .use('bubble')
-                        .sort(inputArray);
+                        sortAlgorithms
+                            .use('insertion')
+                            .sort(inputArray);
 
-                    sortAlgorithms
-                        .use('merge')
-                        .sort(inputArray);
+                        sortAlgorithms
+                            .use('selection')
+                            .sort(inputArray);
 
-                    sortAlgorithms
-                        .use('quick')
-                        .sort(inputArray);
-                });
+                        sortAlgorithms
+                            .use('bubble')
+                            .sort(inputArray);
+
+                        sortAlgorithms
+                            .use('merge')
+                            .sort(inputArray);
+
+                        sortAlgorithms
+                            .use('quick')
+                            .sort(inputArray);
+                    });
+            });
+
+            clearEl.addEventListener('click', function (e) {
+                startEl.textContent = 'START';
+                clearInput();
+                startEl.dispatchEvent(
+                    new CustomEvent('click', {
+                        detail: {
+                            reset: true
+                        }
+                    }));
+            });
         })();
-
     }
 ));

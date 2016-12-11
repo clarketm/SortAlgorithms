@@ -1,17 +1,38 @@
 {
-  "name": "data-visualization",
+  "name": "sort-algorithms",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "Sorting algorithm visualization using D3",
+  "main": "sort.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/lite-server/bin/lite-server"
+    "start": "./node_modules/lite-server/bin/lite-server",
+    "css": "./node_modules/less/bin/lessc style.less style.css"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "sort",
+    "algorithm",
+    "insertionsort",
+    "insertion sort",
+    "selectionsort",
+    "selection sort",
+    "bubblesort",
+    "bubble sort",
+    "mergesort",
+    "merge sort",
+    "quicksort",
+    "quick sort",
+    "d3"
+  ],
+  "authors": [
+    "Travis Clarke (clarketm) <travis.m.clarke@gmail.com>"
+  ],
   "license": "ISC",
+  "dependencies": {
+    "d3": "^4.4.0"
+  },
   "devDependencies": {
-    "d3": "^4.4.0",
+    "bootstrap": "^3.3.7",
+    "less": "^2.7.1",
     "lite-server": "^2.2.2"
   }
 }

@@ -1,0 +1,58 @@
+@import "./node_modules/bootstrap/less/variables.less";
+@import "./node_modules/bootstrap/less/mixins/background-variant.less";
+
+@min-height: 5px;
+
+.display {
+  height: @min-height;
+  border: 1px dashed @list-group-link-heading-color
+}
+
+.animate {
+  transition: all 2s ease-in;
+}
+
+.broken {
+  @opacity: 0.2;
+  opacity: @opacity;
+  & + p {
+    opacity: @opacity;
+    &:after {
+      font-size: 60%;
+      margin-left: 5px;
+      color: @code-color;
+      content: "(work in progress)";
+    }
+  }
+}
+
+.insertion {
+  .bg-variant(@state-success-bg);
+  .display;
+  .animate;
+}
+
+.selection {
+  .bg-variant(@state-info-bg);
+  .display;
+  .animate;
+}
+
+.bubble {
+  .bg-variant(@state-warning-bg);
+  .display;
+  .animate;
+}
+
+.merge {
+  .bg-variant(@state-danger-bg);
+  .display;
+  .animate;
+}
+
+.quick {
+  .bg-variant(@well-bg);
+  .display;
+  .animate;
+  .broken;
+}
