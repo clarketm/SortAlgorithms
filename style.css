@@ -6785,18 +6785,8 @@ a.merge:focus {
   height: 5px;
   border: 1px dashed #333;
   transition: all 2s ease-in;
-  opacity: 0.2;
 }
 a.quick:hover,
 a.quick:focus {
   background-color: #dcdcdc;
-}
-.quick + p {
-  opacity: 0.2;
-}
-.quick + p:after {
-  font-size: 60%;
-  margin-left: 5px;
-  color: #c7254e;
-  content: "(work in progress)";
 }

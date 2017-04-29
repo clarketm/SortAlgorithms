@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./node_modules/lite-server/bin/lite-server",
-    "css": "./node_modules/less/bin/lessc style.less style.css",
-    "js": "./node_modules/.bin/babel sort.js visual.js -o script.js"
+    "css": "lessc style.less style.css",
+    "js": "babel sort.js visual.js -o script.js"
   },
   "keywords": [
     "sort",
