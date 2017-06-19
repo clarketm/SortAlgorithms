@@ -17,7 +17,7 @@
         const document = window.document;
         let timeouts = [],
             queue = [],
-            duration = 2000;
+            duration = 100;
 
         function clearTimeouts() {
             return new Promise((resolve, reject) => {

@@ -1,6 +1,10 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
 ;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -23,24 +27,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         function insertionSort(array) {
             array = array.slice();
-            if (array.length <= 1) return;
 
-            var ptr = 1;
-            var p1 = 1;
-            var p2 = 0;
-
-            while (ptr < array.length) {
-                var key = array[ptr];
-                while (p2 >= 0 && key < array[p2]) {
-                    array[p1] = array[p2];
-                    array[p2] = key;
-                    p1--;
-                    p2--;
-                    visualizer(array.slice(), ++self.counter, 'insertion');
+            for (var i = 1; i < array.length; i++) {
+                for (var j = i; j > 0 && array[j] < array[j - 1]; j--) {
+                    self.counter++;
+                    // console.log("insertionSort", self.counter);
+                    self.utils.swap(array, j, j - 1);
+                    visualizer(array.slice(), self.counter, 'insertion');
                 }
-                ptr++;
-                p1 = ptr;
-                p2 = p1 - 1;
             }
             return array;
         }
@@ -49,12 +43,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             array = array.slice();
 
             for (var i = 0; i < array.length - 1; i++) {
+                var min = i;
                 for (var j = i + 1; j < array.length; j++) {
-                    if (array[j] < array[i]) {
-                        self.utils.swap(array, i, j);
+                    self.counter++;
+                    // console.log("selectionSort", self.counter);
+
+                    if (array[j] < array[min]) {
+                        min = j;
                     }
-                    visualizer(array.slice(), ++self.counter, 'selection');
                 }
+                self.utils.swap(array, i, min);
+                visualizer(array.slice(), self.counter, 'selection');
             }
             return array;
         }
@@ -62,58 +61,62 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         function bubbleSort(array) {
             array = array.slice();
 
-            var isSorted = false,
-                stoppingPoint = array.length;
+            var isSorted = false;
+            var lastUnsorted = array.length - 1;
 
             while (!isSorted) {
                 isSorted = true;
-                for (var current = 0, next = 1; next < stoppingPoint;) {
-                    if (array[current] > array[next]) {
+                for (var i = 0; i < lastUnsorted; i++) {
+                    self.counter++;
+                    if (array[i] > array[i + 1]) {
+                        self.utils.swap(array, i, i + 1);
                         isSorted = false;
-                        var tmp = array[current];
-                        array[current] = array[next];
-                        array[next] = tmp;
-                        visualizer(array.slice(), ++self.counter, 'bubble');
+                        visualizer(array.slice(), self.counter, 'bubble');
                     }
-                    current++;
-                    next++;
                 }
-                stoppingPoint--;
+                lastUnsorted--;
             }
-            return array;
+            return array
         }
 
         function mergeSort(array) {
-
-            var n = array.length,
-                a0 = array,
-                a1 = new Array(n),
-                m = void 0,
-                i = void 0;
-            for (m = 1; m < n; m <<= 1) {
-                for (i = 0; i < n; i += m << 1) {
-                    var left = i,
-                        right = Math.min(i + m, n),
-                        end = Math.min(i + (m << 1), n);
-                    merge(a0, a1, left, right, end);
-                    visualizer(a1.slice(), ++self.counter, 'merge');
+            var i,
+                j,
+                n = array.length,
+                m = 1;
+            // double the size each pass
+            while (m < array.length) {
+                i = j = 0;
+                while (i < array.length) {
+                    self.counter++;
+                    j += merge(i, i += m, i += m);
                 }
-                i = a0, a0 = a1, a1 = i;
-            }
-            if (array === a1) {
-                for (var _i = 0; _i < n; ++_i) {
-                    array[_i] = a0[_i];
+                if (!j) {
+                    m <<= 1;
                 }
+                visualizer(array.slice(), self.counter, 'merge');
             }
-
-            function merge(a0, a1, left, right, end) {
-                for (var i0 = left, i1 = right; left < end; ++left) {
-                    if (i0 < right && (i1 >= end || a0[i0] <= a0[i1])) {
-                        a1[left] = a0[i0++];
-                    } else {
-                        a1[left] = a0[i1++];
+            // Merges two adjacent sorted arrays in-place.
+            function merge(start, middle, end) {
+                middle = Math.min(array.length, middle);
+                end = Math.min(array.length, end);
+                for (; start < middle; start++) {
+                    if (array[start] > array[middle]) {
+                        var v = array[start];
+                        array[start] = array[middle];
+                        insert(middle, end, v);
+                        return true;
                     }
                 }
+                return false;
+            }
+
+            function insert(start, end, v) {
+                while (start + 1 < end && array[start + 1] < v) {
+                    self.utils.swap(array, start, start + 1);
+                    start++;
+                }
+                array[start] = v;
             }
         }
 
@@ -181,9 +184,46 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 });
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray = function () {
+    function sliceIterator(arr, i) {
+        var _arr = [];
+        var _n = true;
+        var _d = false;
+        var _e = undefined;
+        try {
+            for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                _arr.push(_s.value);
+                if (i && _arr.length === i) break;
+            }
+        } catch (err) {
+            _d = true;
+            _e = err;
+        } finally {
+            try {
+                if (!_n && _i["return"]) _i["return"]();
+            } finally {
+                if (_d) throw _e;
+            }
+        }
+        return _arr;
+    }
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+    return function (arr, i) {
+        if (Array.isArray(arr)) {
+            return arr;
+        } else if (Symbol.iterator in Object(arr)) {
+            return sliceIterator(arr, i);
+        } else {
+            throw new TypeError("Invalid attempt to destructure non-iterable instance");
+        }
+    };
+}();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
 ;(function (root, factory) {
     "use strict";
