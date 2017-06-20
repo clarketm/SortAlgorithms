@@ -24,125 +24,121 @@
         ]);
 
         function insertionSort(array) {
-            array = array.slice();
-            if (array.length <= 1) return;
-
-            let ptr = 1;
-            let p1 = 1;
-            let p2 = 0;
-
-            while (ptr < array.length) {
-                let key = array[ptr];
-                while (p2 >= 0 && key < array[p2]) {
-                    array[p1] = array[p2];
-                    array[p2] = key;
-                    p1--;
-                    p2--;
-                    visualizer(array.slice(), ++self.counter, 'insertion');
+            for (let i = 1; i < array.length; i++) {
+                for (let j = i; j > 0 && array[j] < array[j - 1]; j--) {
+                    self.counter++;
+                    self.utils.swap(array, j, j - 1);
+                    visualizer(array.slice(), self.counter, 'insertion');
                 }
-                ptr++;
-                p1 = ptr;
-                p2 = p1 - 1;
             }
             return array;
         }
 
         function selectionSort(array) {
-            array = array.slice();
-
             for (let i = 0; i < array.length - 1; i++) {
+                let min = i;
                 for (let j = i + 1; j < array.length; j++) {
-                    if (array[j] < array[i]) {
-                        self.utils.swap(array, i, j);
+                    self.counter++;
+                    if (array[j] < array[min]) {
+                        min = j;
                     }
-                    visualizer(array.slice(), ++self.counter, 'selection');
                 }
+                self.utils.swap(array, i, min);
+                visualizer(array.slice(), self.counter, 'selection');
             }
             return array;
         }
 
         function bubbleSort(array) {
-            array = array.slice();
-
-            let isSorted = false,
-                stoppingPoint = array.length;
+            let isSorted = false;
+            let lastUnsorted = array.length - 1;
 
             while (!isSorted) {
                 isSorted = true;
-                for (let current = 0, next = 1; next < stoppingPoint;) {
-                    if (array[current] > array[next]) {
+                for (let i = 0; i < lastUnsorted; i++) {
+                    if (array[i] > array[i + 1]) {
+                        self.counter++;
+                        self.utils.swap(array, i, i + 1);
                         isSorted = false;
-                        let tmp = array[current];
-                        array[current] = array[next];
-                        array[next] = tmp;
-                        visualizer(array.slice(), ++self.counter, 'bubble');
+                        visualizer(array.slice(), self.counter, 'bubble');
                     }
-                    current++;
-                    next++;
                 }
-                stoppingPoint--;
+                lastUnsorted--;
             }
-            return array;
+            return array
         }
 
         function mergeSort(array) {
 
-            let n = array.length, a0 = array, a1 = new Array(n), m, i;
-            for (m = 1; m < n; m <<= 1) {
-                for (i = 0; i < n; i += m << 1) {
-                    let left = i,
-                        right = Math.min(i + m, n),
-                        end = Math.min(i + (m << 1), n);
-                    merge(a0, a1, left, right, end);
-                    visualizer(a1.slice(), ++self.counter, 'merge');
+            let i, j, m = 1;
+
+            while (m < array.length) {
+                i = j = 0;
+                while (i < array.length) {
+                    self.counter++;
+                    visualizer(array.slice(), self.counter, 'merge');
+                    j += merge(i, i += m, i += m);
                 }
-                i = a0, a0 = a1, a1 = i;
-            }
-            if (array === a1) {
-                for (let i = 0; i < n; ++i) {
-                    array[i] = a0[i];
-                }
+                !j && (m <<= 1);
+                visualizer(array.slice(), self.counter, 'merge');
             }
 
-            function merge(a0, a1, left, right, end) {
-                for (let i0 = left, i1 = right; left < end; ++left) {
-                    if (i0 < right && (i1 >= end || a0[i0] <= a0[i1])) {
-                        a1[left] = a0[i0++];
-                    } else {
-                        a1[left] = a0[i1++];
+            function merge(start, middle, end) {
+                middle = Math.min(array.length, middle);
+                end = Math.min(array.length, end);
+                for (; start < middle; start++) {
+                    if (array[start] > array[middle]) {
+                        let v = array[start];
+                        array[start] = array[middle];
+                        insert(middle, end, v);
+                        return true;
                     }
                 }
+                return false;
+            }
+
+            function insert(start, end, v) {
+                while (start + 1 < end && array[start + 1] < v) {
+                    self.utils.swap(array, start, start + 1);
+                    start++;
+                }
+                array[start] = v;
             }
         }
 
         function quickSort(array) {
-            // TODO: fix quickSort visualizer
 
-            return _quickSort(array.slice(), 0, array.length);
+            return recurse(0, array.length);
 
-            function _quickSort(array, left, right) {
-                visualizer(array.slice(), ++self.counter, 'quick');
-
-                if (left < right - 1) {
-                    let pivot = left + right >> 1;
-                    pivot = partition(array, left, right, pivot);
-                    _quickSort(array, left, pivot);
-                    _quickSort(array, pivot + 1, right);
-                }
-            }
-
-            function partition(array, left, right, pivot) {
-                let pivotValue = array[pivot];
-                self.utils.swap(array, pivot, --right);
+            function partition(left, right, pivot) {
+                self.counter++;
+                let v = array[pivot];
+                swap(pivot, --right);
                 for (let i = left; i < right; ++i) {
-                    if (array[i] < pivotValue) {
-                        self.utils.swap(array, i, left++);
+                    self.counter++;
+                    if (array[i] <= v) {
+                        swap(i, left++);
                     }
                 }
-                self.utils.swap(array, left, right);
+                swap(left, right);
                 return left;
             }
 
+            function swap(i, j) {
+                self.utils.swap(array, i, j);
+                visualizer(array.slice(), self.counter, 'quick');
+            }
+
+            function recurse(left, right) {
+                self.counter++;
+                visualizer(array.slice(), self.counter, 'quick');
+                if (left < right - 1) {
+                    let pivot = partition(left, right, (left + right) >> 1);
+                    recurse(left, pivot);
+                    recurse(pivot + 1, right);
+                }
+                return array;
+            }
         }
 
         return self;

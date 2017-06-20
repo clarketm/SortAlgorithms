@@ -17,7 +17,7 @@
         const document = window.document;
         let timeouts = [],
             queue = [],
-            duration = 100;
+            duration = 2000;
 
         function clearTimeouts() {
             return new Promise((resolve, reject) => {
@@ -133,23 +133,23 @@
 
                         sortAlgorithms
                             .use('insertion')
-                            .sort(inputArray);
+                            .sort(inputArray.slice());
 
                         sortAlgorithms
                             .use('selection')
-                            .sort(inputArray);
+                            .sort(inputArray.slice());
 
                         sortAlgorithms
                             .use('bubble')
-                            .sort(inputArray);
+                            .sort(inputArray.slice());
 
                         sortAlgorithms
                             .use('merge')
-                            .sort(inputArray);
+                            .sort(inputArray.slice());
 
                         sortAlgorithms
                             .use('quick')
-                            .sort(inputArray);
+                            .sort(inputArray.slice());
                     });
             });
 
