@@ -10,7 +10,7 @@ $ https://github.com/clarketm/SortAlgorithms.git
 
 ### Install Dependencies
 ```shell
-$ cd sorting-algorithms
+$ cd SortAlgorithms
 $ npm install
 ```
 
