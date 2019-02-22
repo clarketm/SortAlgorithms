@@ -5,7 +5,7 @@ Sorting algorithm visualization using D3. **=> [Demo](https://www.travismclarke.
 
 ### Clone Project
 ```shell
-$ git clone https://github.com/Irving09/sorting-algorithms.git
+$ https://github.com/clarketm/SortAlgorithms.git
 ```
 
 ### Install Dependencies
